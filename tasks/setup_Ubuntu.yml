@@ -1,0 +1,11 @@
+---
+
+- name: "Ensuring ppa:ansible/ansible is used"
+  apt_repository: repo='ppa:ansible/ansible'
+
+- name: Installing packages
+  apt:
+    name: "{{ mage_packages }}"
+    state: latest
+    update_cache: true
+

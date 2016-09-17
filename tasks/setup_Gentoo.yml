@@ -1,0 +1,10 @@
+---
+- name: Installing packages
+  portage: 
+    package: "{{ item }}"
+    update: yes
+    deep: yes
+    sync: web
+    newuse: yes
+  with_items:
+    - "{{ mage_packages }}"

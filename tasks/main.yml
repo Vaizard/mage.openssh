@@ -1,0 +1,35 @@
+---
+
+- name: Including distro-specific variables
+  include_vars: "vars_{{ ansible_distribution }}.yml"
+  
+- name: "Setting things up for {{ ansible_distribution }}"
+  include: "setup_{{ ansible_distribution }}.yml"
+  when: ansible_distribution in [ 'Ubuntu', 'Gentoo' ]
+
+- name: Configuring ssh keepalive interval
+  lineinfile: dest=/etc/ssh/ssh_config
+  args:
+    regexp: '^(.*)ServerAliveInterval(.*)'
+    line: "    ServerAliveInterval 60"
+    create: yes
+
+- name: Configuring ssh keepalive count
+  lineinfile: dest=/etc/ssh/ssh_config
+  args:
+    regexp: '^(.*)ServerAliveCountMax(.*)'
+    line: "    ServerAliveCountMax 3"
+    create: yes
+      
+- name: "Ensuring that the sshd service is started and enabled"
+  service:
+    name: "{{ openssh_svcname }}"
+    state: started
+    enabled: yes
+  when: openssh_svcenable == 'yes'
+
+- name: "Ensuring that the sshd service is disabled"
+  service:
+    name: "{{ openssh_svcname }}"
+    enabled: no
+  when: openssh_svcenable == 'no' 
