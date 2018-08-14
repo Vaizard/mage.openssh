@@ -3,3 +3,4 @@ mage_packages:
   - ssh
 
 openssh_svcname: ssh
+openssh_configpath: /etc/ssh/sshd_config

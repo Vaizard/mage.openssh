@@ -1,2 +1,12 @@
 ---
-openssh_svcenable: 'yes'
+openssh_port: 22
+openssh_password_authentication: "no"
+openssh_permit_root_login: "yes"
+openssh_usedns: "no"
+openssh_permit_empty_password: "no"
+openssh_challenge_response_auth: "no"
+openssh_gss_api_authentication: "no"
+openssh_x11_forwarding: "no"
+openssh_client_alive_count_max: "3"
+openssh_client_alive_interval: "0"
+openssh_authentication_methods: "publickey"

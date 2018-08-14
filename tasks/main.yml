@@ -7,29 +7,39 @@
   include: "setup_{{ ansible_distribution }}.yml"
   when: ansible_distribution in [ 'Ubuntu', 'Gentoo' ]
 
-- name: Configuring ssh keepalive interval
-  lineinfile: dest=/etc/ssh/ssh_config
-  args:
-    regexp: '^(.*)ServerAliveInterval(.*)'
-    line: "    ServerAliveInterval 60"
-    create: yes
+- name: Ensure Openssh is configured right.
+  lineinfile:
+    dest: "{{ openssh_configpath }}"
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+    state: present
+  with_items:
+    - regexp: "^PasswordAuthentication"
+      line: "PasswordAuthentication {{ openssh_password_authentication }}"
+    - regexp: "^PermitRootLogin"
+      line: "PermitRootLogin {{ openssh_permit_root_login }}"
+    - regexp: "^Port"
+      line: "Port {{ openssh_port }}"
+    - regexp: "^UseDNS"
+      line: "UseDNS {{ openssh_usedns }}"
+    - regexp: "^PermitEmptyPasswords"
+      line: "PermitEmptyPasswords {{ openssh_permit_empty_password }}"
+    - regexp: "^ChallengeResponseAuthentication"
+      line: "ChallengeResponseAuthentication {{ openssh_challenge_response_auth }}"
+    - regexp: "^GSSAPIAuthentication"
+      line: "GSSAPIAuthentication {{ openssh_gss_api_authentication }}"
+    - regexp: "^X11Forwarding"
+      line: "X11Forwarding {{ openssh_x11_forwarding }}"
+    - regexp: "^AuthenticationMethods"
+      line: "AuthenticationMethods {{ openssh_authentication_methods }}"
+    - regexp: "^ClientAliveInterval"
+      line: "ClientAliveInterval {{ openssh_client_alive_interval }}"
+    - regexp: "^ClientAliveCountMax"
+      line: "ClientAliveCountMax {{ openssh_client_alive_count_max }}"
+  notify: restart ssh
 
-- name: Configuring ssh keepalive count
-  lineinfile: dest=/etc/ssh/ssh_config
-  args:
-    regexp: '^(.*)ServerAliveCountMax(.*)'
-    line: "    ServerAliveCountMax 3"
-    create: yes
-      
 - name: "Ensuring that the sshd service is started and enabled"
   service:
     name: "{{ openssh_svcname }}"
     state: started
     enabled: yes
-  when: openssh_svcenable == 'yes'
-
-- name: "Ensuring that the sshd service is disabled"
-  service:
-    name: "{{ openssh_svcname }}"
-    enabled: no
-  when: openssh_svcenable == 'no' 
