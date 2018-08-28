@@ -42,4 +42,4 @@
   service:
     name: "{{ openssh_svcname }}"
     state: started
-    enabled: yes
+    enabled: "yes"
