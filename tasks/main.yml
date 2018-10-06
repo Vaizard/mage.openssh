@@ -7,39 +7,44 @@
   include: "setup_{{ ansible_distribution }}.yml"
   when: ansible_distribution in [ 'Ubuntu', 'Gentoo' ]
 
-- name: Ensure Openssh is configured right.
+- name: Ensure Openssh client is configured right.
+  template:
+    src: ssh_config.j2
+    dest: "{{ ssh_config_path }}"
+
+- name: Ensure Openssh daemon is configured right.
   lineinfile:
-    dest: "{{ openssh_configpath }}"
+    dest: "{{ sshd_config_path }}"
     regexp: "{{ item.regexp }}"
     line: "{{ item.line }}"
     state: present
   with_items:
     - regexp: "^PasswordAuthentication"
-      line: "PasswordAuthentication {{ openssh_password_authentication }}"
+      line: "PasswordAuthentication {{ sshd_config.password_authentication }}"
     - regexp: "^PermitRootLogin"
-      line: "PermitRootLogin {{ openssh_permit_root_login }}"
+      line: "PermitRootLogin {{ sshd_config.permit_root_login }}"
     - regexp: "^Port"
-      line: "Port {{ openssh_port }}"
+      line: "Port {{ sshd_config.port }}"
     - regexp: "^UseDNS"
-      line: "UseDNS {{ openssh_usedns }}"
+      line: "UseDNS {{ sshd_config.usedns }}"
     - regexp: "^PermitEmptyPasswords"
-      line: "PermitEmptyPasswords {{ openssh_permit_empty_password }}"
+      line: "PermitEmptyPasswords {{ sshd_config.permit_empty_password }}"
     - regexp: "^ChallengeResponseAuthentication"
-      line: "ChallengeResponseAuthentication {{ openssh_challenge_response_auth }}"
+      line: "ChallengeResponseAuthentication {{ sshd_config.challenge_response_auth }}"
     - regexp: "^GSSAPIAuthentication"
-      line: "GSSAPIAuthentication {{ openssh_gss_api_authentication }}"
+      line: "GSSAPIAuthentication {{ sshd_config.gss_api_authentication }}"
     - regexp: "^X11Forwarding"
-      line: "X11Forwarding {{ openssh_x11_forwarding }}"
+      line: "X11Forwarding {{ sshd_config.x11_forwarding }}"
     - regexp: "^AuthenticationMethods"
-      line: "AuthenticationMethods {{ openssh_authentication_methods }}"
+      line: "AuthenticationMethods {{ sshd_config.authentication_methods }}"
     - regexp: "^ClientAliveInterval"
-      line: "ClientAliveInterval {{ openssh_client_alive_interval }}"
+      line: "ClientAliveInterval {{ sshd_config.client_alive_interval }}"
     - regexp: "^ClientAliveCountMax"
-      line: "ClientAliveCountMax {{ openssh_client_alive_count_max }}"
+      line: "ClientAliveCountMax {{ sshd_config.client_alive_count_max }}"
   notify: restart ssh
 
 - name: "Ensuring that the sshd service is started and enabled"
   service:
-    name: "{{ openssh_svcname }}"
-    state: started
-    enabled: yes
+    name: "{{ sshd_svcname }}"
+    state: "{{ sshd_state }}"
+    enabled: "{{ sshd_enabled }}"

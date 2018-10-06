@@ -1,12 +1,29 @@
 ---
-openssh_port: 22
-openssh_password_authentication: "no"
-openssh_permit_root_login: "yes"
-openssh_usedns: "no"
-openssh_permit_empty_password: "no"
-openssh_challenge_response_auth: "no"
-openssh_gss_api_authentication: "no"
-openssh_x11_forwarding: "no"
-openssh_client_alive_count_max: "3"
-openssh_client_alive_interval: "0"
-openssh_authentication_methods: "publickey"
+#
+# sshd configuration
+#
+
+sshd_state: started
+sshd_enabled: yes
+sshd_config:
+  port: 22
+  password_authentication: "no"
+  permit_root_login: "yes"
+  usedns: "no"
+  permit_empty_password: "no"
+  challenge_response_auth: "no"
+  gss_api_authentication: "no"
+  x11_forwarding: "no"
+  client_alive_count_max: "3"
+  client_alive_interval: "0"
+  authentication_methods: "publickey"
+
+#
+# ssh client configuration
+#
+ssh_config: []
+ssh_config_defaults:
+  - Host: "*"
+    SendEnv: "LANG LC_*"
+    HashKnownHosts: "yes"
+    GSSAPIAuthentication: "yes"

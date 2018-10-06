@@ -2,5 +2,6 @@
 mage_packages:
   - net-misc/openssh
 
-openssh_svcname: sshd
-openssh_configpath: /etc/ssh/sshd_config
+sshd_svcname: sshd
+sshd_config_path: /etc/ssh/sshd_config
+ssh_config_path: /etc/ssh/ssh_config
