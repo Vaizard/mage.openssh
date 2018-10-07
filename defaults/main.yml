@@ -17,6 +17,8 @@ sshd_config:
   client_alive_count_max: "3"
   client_alive_interval: "0"
   authentication_methods: "publickey"
+sshd_sftponly_enabled: true
+sshd_sftponly_group: sftponly
 
 #
 # ssh client configuration

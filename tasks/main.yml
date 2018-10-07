@@ -43,6 +43,35 @@
       line: "ClientAliveCountMax {{ sshd_config.client_alive_count_max }}"
   notify: restart ssh
 
+- name: Ensure correct state of additional groups (sftponly enabled).
+  group:
+    name: "{{ sshd_sftponly_group }}"
+    state: "{{ 'present' if sshd_sftponly_enabled else 'absent' }}"
+  when: sshd_sftponly_enabled
+
+- name: Ensure correct state of additional groups (sftponly disabled).
+  group:
+    name: "{{ sshd_sftponly_group }}"
+    state: "{{ 'present' if sshd_sftponly_enabled else 'absent' }}"
+  ignore_errors: yes # required here, otherwise this may fail if users exist who re in the group which is to be deleted
+  when: not sshd_sftponly_enabled
+
+
+- name: Ensure sftp restrictions apply.
+  blockinfile:
+    dest: "{{ sshd_config_path }}"
+    state: "{{ 'present' if sshd_sftponly_enabled else 'absent' }}"
+    block: |
+      Match Group {{ sshd_sftponly_group }}
+          ForceCommand internal-sftp
+          ChrootDirectory %h
+          AllowAgentForwarding no
+          AllowTcpForwarding no
+          PermitTunnel no
+          X11Forwarding no
+  notify: restart ssh
+
+
 - name: "Ensuring that the sshd service is started and enabled"
   service:
     name: "{{ sshd_svcname }}"
