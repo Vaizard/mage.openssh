@@ -29,3 +29,4 @@ ssh_config_defaults:
     SendEnv: "LANG LC_*"
     HashKnownHosts: "yes"
     GSSAPIAuthentication: "yes"
+    StrictHostKeyChecking: "accept-new"
