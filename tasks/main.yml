@@ -7,6 +7,11 @@
   include: "setup_{{ ansible_distribution }}.yml"
   when: ansible_distribution in [ 'Ubuntu', 'Gentoo' ]
 
+- name: "Ensure /etc/ssh/config.d is present"
+  file:
+    path: "/etc/ssh/config.d"
+    state: directory
+
 - name: Ensure Openssh client is configured right.
   template:
     src: ssh_config.j2
