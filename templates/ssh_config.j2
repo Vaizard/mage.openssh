@@ -49,6 +49,8 @@
 #   HashKnownHosts yes
 #   GSSAPIAuthentication yes
 
+ServerAliveInterval 30
+
 Include config.d/*
 
 {% for cfg in ssh_config + ssh_config_defaults %}

@@ -5,20 +5,23 @@
 
 sshd_state: started
 sshd_enabled: yes
-sshd_config:
-  port: 22
-  password_authentication: "no"
-  permit_root_login: "yes"
-  usedns: "no"
-  permit_empty_password: "no"
-  challenge_response_auth: "no"
-  gss_api_authentication: "no"
-  x11_forwarding: "no"
-  client_alive_count_max: "3"
-  client_alive_interval: "0"
-  authentication_methods: "publickey"
 sshd_sftponly_enabled: true
 sshd_sftponly_group: sftponly
+
+# settings applied below will override the defaults
+sshd_config:
+  port: 22
+  #password_authentication: "no"
+  #pubkey_authentication: "yes"
+  #permit_root_login: "without-password"
+  #usedns: "no"
+  #permit_empty_password: "no"
+  #challenge_response_auth: "no"
+  #gss_api_authentication: "no"
+  #x11_forwarding: "no"
+  #client_alive_count_max: "6"
+  #client_alive_interval: "30"
+  #authentication_methods: "publickey"
 
 #
 # ssh client configuration
