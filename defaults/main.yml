@@ -22,6 +22,8 @@ sshd_config:
   #client_alive_count_max: "6"
   #client_alive_interval: "30"
   #authentication_methods: "publickey"
+  #allow_users: "user1 user2@212.*"
+
 
 #
 # ssh client configuration
