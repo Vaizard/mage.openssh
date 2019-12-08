@@ -48,6 +48,8 @@
       line: "ClientAliveInterval {{ sshd_config.client_alive_interval | default('0') }}"
     - regexp: "^ClientAliveCountMax"
       line: "ClientAliveCountMax {{ sshd_config.client_alive_count_max | default('3') }}"
+    - regexp: "^AllowUsers"
+      line: "{{ 'AllowUsers ' + sshd_config.allow_users if sshd_config.allow_users is defined else '' }}"
   notify: restart ssh
 
 - name: Ensure correct state of additional groups (sftponly enabled).
